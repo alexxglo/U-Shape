@@ -1,0 +1,12 @@
+.venv\Scripts\activate -- activate the virtual environment
+quasar dev -- activate the quasar app
+python manage.py runserver -- activate django
+
+
+--Don’t forget to create our new migrations and migrate them before we run the server with the commands:
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+
+
+++ parteneriat de site-uri de retete
