@@ -8,20 +8,15 @@
         mobile-arrows
         class="bg-primary text-white shadow-2"
       >
-        <q-tab name="chest" label="Chest" />
-        <q-tab name="arms" label="Arms" />
-        <q-tab name="back" label="Back" />
-        <q-tab name="shoulders" label="Shoulders" />
-        <q-tab name="legs" label="Legs" />
+      <q-tab v-for="part in exercises" :key="part"
+      :name="part.exName" :label="part.exLabel"/>
       </q-tabs>
       <q-separator />
       <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="chest">
-        <ExerciseDraft/>
-      </q-tab-panel>
-      <q-tab-panel name="arms">
-        <h5>hello</h5>
-      </q-tab-panel>
+      <q-tab-panel v-for="(part, index) in exercises" :key="part"
+          :name="exercises[index].exName">
+          <ExerciseDraft :myKey="index"/>
+          </q-tab-panel>
       </q-tab-panels>
     </div>
   </div>
@@ -33,6 +28,28 @@ export default {
   components: { ExerciseDraft },
   data () {
     return {
+      exercises: [
+        {
+          exName: 'chest',
+          exLabel: 'Chest'
+        },
+        {
+          exName: 'arms',
+          exLabel: 'Arms'
+        },
+        {
+          exName: 'back',
+          exLabel: 'Back'
+        },
+        {
+          exName: 'shoulders',
+          exLabel: 'Shoulders'
+        },
+        {
+          exName: 'legs',
+          exLabel: 'Legs'
+        }
+      ],
       tab: 'chest'
     }
   }

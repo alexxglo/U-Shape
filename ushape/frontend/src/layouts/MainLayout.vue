@@ -16,7 +16,9 @@
           U-Shape
         </router-link>
         </q-toolbar-title>
-        Log in
+        <router-link to="/Login" style="text-decoration: none; color: inherit;">
+        Log in / Register
+        </router-link>
       </q-toolbar>
     </q-header>
 

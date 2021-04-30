@@ -2,12 +2,9 @@
    <div class="q-px-lg q-pb-md">
     <q-timeline color="primary">
       <q-timeline-entry heading>
-        Keto diet
+        {{content[componentNo].title}}
       </q-timeline-entry>
-      <text-body1>The ketogenic diet (or keto diet, for short) is a low carb, high fat diet that offers many health benefits.
-In fact, many studies show that this type of diet can help you lose weight and improve your health.<br>
-Ketogenic diets may even have benefits against diabetes, cancer, epilepsy, and Alzheimer’s disease.</text-body1>
-
+      <text-body1 v-html="content[componentNo].description"></text-body1>
       <q-timeline-entry>
         <template v-slot:title>
           Breakfast
@@ -18,26 +15,9 @@ Ketogenic diets may even have benefits against diabetes, cancer, epilepsy, and A
         <div>
             <p> Suggestions: </p>
             <q-list bordered separator>
-      <q-item clickable v-ripple>
-        <q-item-section>Veggie and egg muffins with tomatoes</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Egg, tomato, basil and spinach omelet</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Nut milk chiat pudding topped with coconut and blackberries</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Omelet with avocado, salsa, peppers, onion and spices</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Sugar-free greek, whole milk yogurt with peanut butter, cocoa powder, and berries</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Cream cheese pancakes with blueberries and a side of grilled mushrooms</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Fried eggs with mushrooms</q-item-section>
+      <q-item v-ripple v-for="text in content[componentNo].breakfast"
+      :key="text">
+      <q-item-selection>{{text}}</q-item-selection>
       </q-item>
       </q-list>
         </div>
@@ -53,26 +33,8 @@ Ketogenic diets may even have benefits against diabetes, cancer, epilepsy, and A
         <div>
             <p> Suggestions: </p>
             <q-list bordered separator>
-      <q-item clickable v-ripple>
-        <q-item-section>Chicken salad with olive oil, feta cheese, olives and a side salad</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Almond milk, peanut butter, spinach, cocoa powder, and stevia milkshake with a side of sliced strawberries</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Avocado shrimp salad</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Nuts and celery sticks with guacamole and salsa</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section> Ground beef lettuce wrap tacos with sliced bell peppers</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Zucchini and beet “noodle” salad</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Sesame chicken and broccoli</q-item-section>
+      <q-item v-ripple v-for="text in content[componentNo].lunch" :key="text">
+        <q-item-section>{{text}}</q-item-section>
       </q-item>
       </q-list>
         </div>
@@ -88,26 +50,8 @@ Ketogenic diets may even have benefits against diabetes, cancer, epilepsy, and A
         <p>Suggestions:</p>
        <div>
             <q-list bordered separator>
-      <q-item clickable v-ripple>
-        <q-item-section>Salmon with asparagus cooked in butter</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Cheese-shell tacos with salsa</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Pork chops with Parmesan cheese, broccoli, and salad</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Chicken stuffed with pesto and cream cheese, and a side of grilled zucchini</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Loaded cauliflower and mixed veggies</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>White fish cooked in coconut oil with kale and toasted pine nuts</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Spaghetti squash Bolognese</q-item-section>
+      <q-item v-ripple v-for="text in content[componentNo].lunch" :key="text">
+        <q-item-section>{{text}}</q-item-section>
       </q-item>
       </q-list>
         </div>
@@ -120,29 +64,11 @@ Ketogenic diets may even have benefits against diabetes, cancer, epilepsy, and A
         <template v-slot:subtitle>
           In-between
         </template>
-        <p>Suggestions</p>
+        <p>Suggestions:</p>
          <div>
             <q-list bordered separator>
-      <q-item clickable v-ripple>
-        <q-item-section>90% dark chocolate</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Full-fat Greek yogurt mixed with nut butter and cocoa powder</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Strawberries and plain cottage cheese</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Nuts or seeds</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Olives</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Cheese</q-item-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-item-section>Smaller portions of leftover meals</q-item-section>
+      <q-item v-ripple v-for="text in content[componentNo].snacks" :key="text">
+        <q-item-section>{{text}}</q-item-section>
       </q-item>
       </q-list>
         </div>
@@ -154,6 +80,56 @@ Ketogenic diets may even have benefits against diabetes, cancer, epilepsy, and A
 <script>
 
 export default {
-
+  props: {
+    componentNo: {
+      type: Number,
+      required: true
+    }
+  },
+  data () {
+    return {
+      content: [{
+        title: 'Keto diet',
+        description: 'The ketogenic diet (or keto diet, for short) is a low carb, high fat diet that offers many health benefits.In fact, many studies show that this type of diet can help you lose weight and improve your health.<br>Ketogenic diets may even have benefits against diabetes, cancer, epilepsy, and Alzheimer’s disease.',
+        breakfast: [
+          'Veggie and egg muffins with tomatoes',
+          'Egg, tomato, basil and spinach omelet',
+          'Nut milk chiat pudding topped with coconut and blackberries',
+          'Omelet with avocado, salsa, peppers, onion and spices',
+          'Sugar-free greek, whole milk yogurt with peanut butter, cocoa powder, and berries',
+          'Cream cheese pancakes with blueberries and a side of grilled mushrooms',
+          'Fried eggs with mushrooms'
+        ],
+        lunch: [
+          'Chicken salad with olive oil, feta cheese, olives and a side salad',
+          'Almond milk, peanut butter, spinach, cocoa powder, and stevia milkshake with a side of sliced strawberries',
+          'Avocado shrimp salad',
+          'Nuts and celery sticks with guacamole and salsa',
+          'Ground beef lettuce wrap tacos with sliced bell peppers',
+          'Zucchini and beet “noodle” salad',
+          'Sesame chicken and broccoli'
+        ],
+        dinner: [
+          'Salmon with asparagus cooked in butter',
+          'Cheese-shell tacos with salsa',
+          'Pork chops with Parmesan cheese, broccoli, and salad',
+          'Chicken stuffed with pesto and cream cheese, and a side of grilled zucchini',
+          'Loaded cauliflower and mixed veggies',
+          'White fish cooked in coconut oil with kale and toasted pine nuts',
+          'Spaghetti squash Bolognese'
+        ],
+        snacks: [
+          '90% dark chocolate',
+          'Full-fat Greek yogurt mixed with nut butter and cocoa powder',
+          'Strawberries and plain cottage cheese',
+          'Nuts or seeds',
+          'Olives',
+          'Cheese',
+          'Smaller portions of leftover meals'
+        ]
+      }
+      ]
+    }
+  }
 }
 </script>
