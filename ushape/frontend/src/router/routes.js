@@ -9,7 +9,8 @@ const routes = [
       { path: '/exercises', component: () => import('pages/Exercises.vue') },
       { path: '/calorie-calculator', component: () => import('pages/CalorieCalculator.vue') },
       { path: '/journal', component: () => import('pages/Journal.vue') },
-      { path: '/login', component: () => import('pages/Login.vue') }
+      { path: '/login', component: () => import('pages/Login.vue') },
+      { path: '/register', component: () => import('pages/Register.vue') }
     ]
   },
   // Always leave this as last one,

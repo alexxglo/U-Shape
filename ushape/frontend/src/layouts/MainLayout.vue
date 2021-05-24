@@ -16,9 +16,13 @@
           U-Shape
         </router-link>
         </q-toolbar-title>
-        <router-link to="/Login" style="text-decoration: none; color: inherit;">
-        Log in / Register
-        </router-link>
+        <div v-if="!isLoggedIn && !testRouteName">
+        <q-btn to="/login" label="LOGIN" outline color="white" class = "q-mr-md"/>
+        <q-btn to="/register" label="REGISTER" outline color="white" class = ""/>
+       </div>
+        <div v-else>
+         <q-btn @click.prevent="logOut"> Logout </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -86,6 +90,17 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
+    }
+  },
+  computed: {
+    isLoggedIn () {
+      return this.$store.state.auth.status.loggedIn
+    }
+  },
+  methods: {
+    logOut () {
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/login')
     }
   }
 }

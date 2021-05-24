@@ -1,75 +1,116 @@
 <template>
-  <q-page
-    class="row justify-center items-center">
-    <div class="column q-pa-sm">
-      <div class="row">
-        <q-card square class="shadow-24" style="width:300px;height:485px;">
-          <q-card-section class="bg-primary">
-            <h4 class="text-h5 text-white q-my-md text-center">Log-in</h4>
-          </q-card-section>
-          <q-card-section>
-            <q-form class="q-px-sm q-pt-xl">
-              <q-input square clearable v-model="email" type="email" label="Email">
-                <template v-slot:prepend>
-                  <q-icon name="email" />
-                </template>
-              </q-input>
-              <q-input square clearable v-model="password" type="password" label="Password">
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
-                </template>
-              </q-input>
-            </q-form>
-          </q-card-section>
-          <q-card-actions class="q-px-lg">
-            <q-btn unelevated size="lg" color="primary" class="full-width text-white" label="Sign In" />
-          </q-card-actions>
-        </q-card>
-      </div>
+  <div class="col-md-12">
+    <div class="card card-container">
+      <img
+        id="profile-img"
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        class="profile-img-card"
+      />
+      <form name="form" @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            v-model="user.username"
+            type="text"
+            class="form-control"
+            name="username"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            v-model="user.password"
+            type="password"
+            class="form-control"
+            name="password"
+          />
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" :disabled="loading">
+            <span v-show="loading" class="spinner-border spinner-border-sm"></span>
+            <span>Login</span>
+          </button>
+        </div>
+        <div class="form-group">
+          <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
+        </div>
+      </form>
     </div>
-    <div class="column q-pa-lg">
-      <div class="row">
-        <q-card square class="shadow-24" style="width:300px;height:485px;">
-          <q-card-section class="bg-primary">
-            <h4 class="text-h5 text-white q-my-md text-center">Registration</h4>
-          </q-card-section>
-          <q-card-section>
-            <q-form class="q-px-sm q-pt-xl q-pb-lg">
-              <q-input square clearable v-model="email" type="email" label="Email">
-                <template v-slot:prepend>
-                  <q-icon name="email" />
-                </template>
-              </q-input>
-              <q-input square clearable v-model="username" type="username" label="Username">
-                <template v-slot:prepend>
-                  <q-icon name="person" />
-                </template>
-              </q-input>
-              <q-input square clearable v-model="password" type="password" label="Password">
-                <template v-slot:prepend>
-                  <q-icon name="lock" />
-                </template>
-              </q-input>
-            </q-form>
-          </q-card-section>
-          <q-card-actions class="q-px-lg">
-            <q-btn unelevated size="lg" color="primary" class="full-width text-white" label="Get Started" />
-          </q-card-actions>
-        </q-card>
-      </div>
-    </div>
-  </q-page>
+  </div>
 </template>
 
 <script>
+import User from '../models/user'
 export default {
   name: 'Login',
   data () {
     return {
-      email: '',
-      username: '',
-      password: ''
+      user: new User('', ''),
+      loading: false,
+      message: ''
+    }
+  },
+  computed: {
+    loggedIn () {
+      return this.$store.state.auth.status.loggedIn
+    }
+  },
+  created () {
+    if (this.loggedIn) {
+      this.$router.push('/journal')
+    }
+  },
+  methods: {
+    handleLogin () {
+      this.loading = true
+      if (this.user.username && this.user.password) {
+        this.$store.dispatch('auth/login', this.user).then(
+          () => {
+            this.$router.push('/journal')
+            console.log(this.user.username)
+          },
+          error => {
+            this.loading = false
+            this.message =
+              (error.response && error.response.data && error.response.data.message) ||
+              error.message ||
+              error.toString()
+          }
+        )
+      }
     }
   }
 }
 </script>
+
+<style scoped>
+label {
+  display: block;
+  margin-top: 10px;
+}
+.card-container.card {
+  max-width: 350px !important;
+  padding: 40px 40px;
+}
+.card {
+  background-color: #f7f7f7;
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  margin-top: 50px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.profile-img-card {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 10px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+}
+</style>

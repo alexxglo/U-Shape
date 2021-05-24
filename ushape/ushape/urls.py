@@ -17,16 +17,25 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.conf import settings
+from django.conf.urls.static import static
 import os
+from backend.views import MyObtainTokenPairView
+from rest_framework_simplejwt.views import (
+    TokenRefreshView
+)
 
 quasar_urls = [
     path('', lambda request: HttpResponse(render(request, 'index.html'))),
   path('another-path/', lambda request: HttpResponse(render(request, 'index.html'))),
 ]
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(quasar_urls)),
-    path('api/', include('calorielist.urls')),
-    path('api/', include ('backend.urls'))
+    path('api/', include ('backend.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

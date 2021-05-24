@@ -41,7 +41,7 @@ export default {
           'Gifs/lying_fly.gif',
           'Gifs/incline_fly.gif',
           'Gifs/incline_bench_press.gif',
-          'Gifs/incline_bench_press.gif'
+          'Gifs/decline_bench_press.gif'
         ]
       },
       {

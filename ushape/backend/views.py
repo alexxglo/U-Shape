@@ -1,9 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render
-
-# Create your views here.
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
@@ -12,6 +7,16 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from backend.models import Calorielist
 from backend.serializers import CalorielistSerializer
+
+#auth tokens
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated
+
+from django.contrib.auth.models import User
+from .serializers import RegisterSerializer
+from rest_framework import generics
 
 @api_view(['GET', 'POST'])
 def calorielist_list(request, format=None):
@@ -54,3 +59,12 @@ def calorielist_detail(request, pk, format=None):
     elif request.method == 'DELETE':
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
