@@ -60,20 +60,7 @@
       :rows-per-page-options="[1000]"
     >
     <template v-slot:item="props">
-         <q-card class="my-card q-ma-md justify-center items-center" :props = "props" v-if="props.selected == 1" style="max-width:250px; min-width:250px;">
-           <div v-if ="props.row.calories > 300">
-           <q-btn no-caps color="warning" text-color="dark" @click ="triggerCustomRegisteredType1(props.row.alternative, props.row.calories)" label="Healthier alternative" />
-           </div>
-      <q-card-section >
-        <div class="text-h6">{{props.row.name}}</div>
-        <div class="text-subtitle2">{{props.row.calories}} calories / 100g</div>
-      </q-card-section>
-      <q-separator />
-      <q-card-actions vertical>
-        <q-btn class="q-mt-sm" color="primary" unelevated @click="sum(props.row.calories)" label="Add"></q-btn>
-        <q-btn color="black" unelevated @click="difference(props.row.calories), props.selected=0">Delete</q-btn>
-      </q-card-actions>
-    </q-card>
+         <Meal :props="props" v-on:childToParent="onChildClick"/>
         </template>
         </q-table>
         <q-item class="bg-primary" rounded>
@@ -87,7 +74,9 @@
 </template>
 
 <script>
+import Meal from './Meal.vue'
 export default {
+  components: { Meal },
   data () {
     return {
       filter: '',
@@ -238,26 +227,13 @@ export default {
     }
   },
   methods: {
-    sum (add) {
-      this.total_calories = this.total_calories + add
-      return this.total_calories
-    },
-    difference (diff) {
-      if (this.total_calories - diff >= 0) {
-        this.total_calories = this.total_calories - diff
-      }
-      return this.total_calories
-    },
     reset () {
       this.total_calories = 0
+      this.selected.splice(0)
       return this.total_calories
     },
-    triggerCustomRegisteredType1 (alternative, kcal) {
-      var finalMessage = 'A healthier alternative to this meal would be ' + alternative + ' with only ' + kcal + 'kcal per 100g!'
-      this.$q.notify({
-        type: 'my-notif',
-        message: finalMessage
-      })
+    onChildClick (value) {
+      this.total_calories = this.total_calories + value
     }
   },
 
