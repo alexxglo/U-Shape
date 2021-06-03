@@ -90,15 +90,16 @@ export default {
       // functie care ma ajuta sa vad pe ce pagina sunt
       var path = this.$router.currentRoute.path
       if (path === '/login' || path === '/register') {
-        console.log('sunt pe pagina de login')
         return false
       } else {
-        console.log('sunt pe alta pagina, diferita de login')
         return true
       }
     },
     isLoggedIn () {
       return this.$store.state.auth.status.loggedIn
+    },
+    getUsername () { // functie ce returneaza username
+      return this.$store.auth.user.username
     }
   }
 }

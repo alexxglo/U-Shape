@@ -1,80 +1,91 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
+  <div class = "justify-center align-center">
+    <div class="flex flex-center">
+    <q-circular-progress
+      indeterminate
+      size="85px"
+      :thickness="1"
+      color="grey-1"
+      track-color="primary"
+      class="q-ma-md"
+    /></div>
+    <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="justify-center items-center">
+      <q-input
+        ref="username"
+        name = "username"
+        filled
+        v-model="user.username"
+        label="Your username *"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'Please type your username',
+                  val => val.length > 4 || 'Username must contain more than 4 characters']"
       />
-      <form name="form" @submit.prevent="handleRegister">
-        <div v-if="!successful">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input
-              v-model="user.username"
-            type="text"
-            class="form-control"
-            name="username"
+      <q-input
+        ref="email"
+        name = "email"
+        filled
+        v-model="user.email"
+        label="Your e-mail *"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'Please enter your e-mail']"
+      />
+      <q-input
+        ref="password"
+        name = "password"
+        filled
+        :type="isPwd ? 'password' : 'text'"
+        v-model="user.password"
+        label="Your password *"
+        lazy-rules
+        :rules="[val => val.length > 7 || 'Password too short']"
+      >
+      <template v-slot:append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
           />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              v-model="user.email"
-              type="email"
-              class="form-control"
-              name="email"
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              v-model="user.password"
-            type="password"
-            class="form-control"
-            name="password"
+        </template></q-input>
+      <q-input
+        ref="password2"
+        name = "password2"
+        filled
+        :type="isPwd2 ? 'password' : 'text'"
+        v-model="user.password2"
+        label="Repeat your password *"
+        lazy-rules
+        :rules="[val => val.length > 7 || 'Passwords must be identical']">
+        <template v-slot:append>
+          <q-icon
+            :name="isPwd2 ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd2 = !isPwd2"
           />
-          </div>
-          <div class="form-group">
-            <label for="password2">Repeat password</label>
-            <input
-              v-model="user.password2"
-            type="password"
-            class="form-control"
-            name="password2"
-          />
-          </div>
-            <div class="form-group">
-            <label for="first_name">First name</label>
-            <input
-              v-model="user.first_name"
-            type="text"
-            class="form-control"
-            name="first_name"
-          />
-          </div>
-          <div class="form-group">
-            <label for="last_name">Last name</label>
-            <input
-              v-model="user.last_name"
-            type="text"
-            class="form-control"
-            name="last_name"
-          />
-          </div>
-
-          <div class="form-group">
-            <button class="btn btn-primary btn-block">Sign Up</button>
-          </div>
-        </div>
-      </form>
-
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >{{message}}</div>
-    </div>
+        </template></q-input>
+      <q-input
+        ref="first_name"
+        name = "first_name"
+        filled
+        v-model="user.first_name"
+        label="Your first name *"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'Please type your first name']"
+      />
+      <q-input
+        ref="last_name"
+        name = "last_name"
+        filled
+        v-model="user.last_name"
+        label="Your last name *"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'Please type your last name']"
+      />
+       <q-toggle v-model="accept" label="I accept the license and terms" />
+      <div>
+        <q-btn label="Submit" type="submit" color="primary" />
+        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+      </div>
+    </form>
   </div>
 </template>
 
@@ -83,12 +94,15 @@ import User from '../models/user'
 
 export default {
   name: 'Register',
-  data () {
+  data   () {
     return {
       user: new User('', '', '', '', '', ''),
       submitted: false,
       successful: false,
-      message: ''
+      message: '',
+      isPwd: true,
+      isPwd2: true,
+      accept: false
     }
   },
   computed: {
@@ -102,59 +116,65 @@ export default {
     }
   },
   methods: {
-    handleRegister () {
-      this.message = ''
-      this.submitted = true
-      this.$store.dispatch('auth/register', this.user).then(
-        data => {
-          this.message = data.message
-          this.successful = true
-        },
-        error => {
-          this.message =
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString()
-          this.successful = false
-        }
-      )
+    onSubmit () {
+      this.$refs.username.validate()
+      this.$refs.email.validate()
+      this.$refs.password.validate()
+      this.$refs.password2.validate()
+      this.$refs.first_name.validate()
+      this.$refs.last_name.validate()
+
+      if (this.$refs.username.hasError || this.$refs.email.hasError || this.$refs.password.hasError || this.$refs.password2.hasError || this.$refs.first_name.hasError || this.$refs.last_name.hasError) {
+        this.formHasError = true
+      } else if (this.accept !== true) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Please accept license and terms'
+        })
+      } else {
+        this.message = ''
+        this.submitted = true
+        this.$store.dispatch('auth/register', this.user).then(
+          data => {
+            this.message = data.message
+            this.successful = true
+          },
+          error => {
+            this.message =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString()
+            this.successful = false
+          }
+        )
+        this.$q.notify({
+          icon: 'done',
+          color: 'positive',
+          message: 'Submitted'
+        })
+      }
+    },
+
+    onReset () {
+      this.user.username = null
+      this.user.email = null
+      this.user.password = null
+      this.user.password2 = null
+      this.user.first_name = null
+      this.user.last_name = null
+
+      this.$refs.username.resetValidation()
+      this.$refs.email.resetValidation()
+      this.$refs.password.resetValidation()
+      this.$refs.password2.resetValidation()
+      this.$refs.first_name.resetValidation()
+      this.$refs.last_name.resetValidation()
     }
   }
 }
-// REMINDER: you have to set boundaries to username, password, email
+// NOTE TO SELF: you have to set validations to username, password, email
 </script>
-
 <style scoped>
-label {
-  display: block;
-  margin-top: 10px;
-}
-
-.card-container.card {
-  max-width: 350px !important;
-  padding: 40px 40px;
-}
-
-.card {
-  background-color: #f7f7f7;
-  padding: 20px 25px 30px;
-  margin: 0 auto 25px;
-  margin-top: 50px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-}
-
-.profile-img-card {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 10px;
-  display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-}
+form { margin: 0 auto;
+max-width:50%;}
 </style>

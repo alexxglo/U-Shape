@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class Calorielist (models.Model):
     name = models.CharField(max_length=100, blank=True, default='')
     calories = models.TextField(max_length=100, default='')

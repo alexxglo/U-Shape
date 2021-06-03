@@ -111,13 +111,16 @@
       </q-card>
         <q-separator />
     </div>
+    <Calculator/>
   </div>
 </template>
 
 <script>
 //  import axios from 'axios'
 import { api } from 'boot/axios'
+import Calculator from './Calculator.vue'
 export default {
+  components: { Calculator },
   name: 'CalorieCalculator',
   data () {
     return {
