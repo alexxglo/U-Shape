@@ -10,5 +10,14 @@ class Calorielist (models.Model):
     calcium = models.TextField(max_length=100, default='')
     iron = models.TextField(max_length=100, default='')
     isType = models.TextField(max_length=100, default='')
-    # class Meta:
-    #     ordering = ['created']
+
+def imageFile(instance, filename):
+    return '/'.join( ['images', str(instance.id), filename] )
+
+
+class Image (models.Model):
+    username = models.CharField(max_length=100, blank=True, default='')
+    image = models.ImageField(
+        upload_to=imageFile,
+        max_length=254, blank=True, null=True
+    )

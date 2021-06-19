@@ -70,7 +70,7 @@ export default {
     onSubmit () {
       this.$refs.username.validate()
       this.$refs.password.validate()
-
+      console.log(this.user.username)
       if (this.$refs.username.hasError || this.$refs.password.hasError) {
         this.formHasError = true
       } else if (this.accept !== true) {
@@ -83,11 +83,21 @@ export default {
         if (this.user.username && this.user.password) {
           this.$store.dispatch('auth/login', this.user).then(
             () => {
+              this.$store.state.auth.usernameName = this.user.username
               this.$router.push('/journal')
               console.log(this.user.username)
+              this.$q.notify({
+                icon: 'done',
+                color: 'positive',
+                message: 'Logged in'
+              })
             },
             error => {
               this.loading = false
+              this.$q.notify({
+                color: 'negative',
+                message: 'Username or password is incorrect'
+              })
               this.message =
                 (error.response && error.response.data && error.response.data.message) ||
                 error.message ||
@@ -95,11 +105,6 @@ export default {
             }
           )
         }
-        this.$q.notify({
-          icon: 'done',
-          color: 'positive',
-          message: 'Logged in'
-        })
       }
     }
   }

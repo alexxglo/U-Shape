@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from backend.models import Calorielist
+from backend.models import Image
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
@@ -16,11 +17,7 @@ class CalorielistSerializer (serializers.Serializer):
     calcium = serializers.CharField(required=True, allow_blank=True, max_length=100)
     iron = serializers.CharField(required=True, allow_blank=True, max_length=100)
     isType = serializers.CharField(required=True, allow_blank=True, max_length=100)
-# we took shortcuts 
-# class CalorielistSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Calorielist
-#         fields = ['id', 'name', 'calories', 'fat', 'carbs', 'protein', 'sodium', 'calcium', 'iron', 'isType']
+
     def create(self, validated_data):
         return Calorielist.objects.create(**validated_data)
 
@@ -37,13 +34,60 @@ class CalorielistSerializer (serializers.Serializer):
         instance.save()
         return instance
 
+class Base64ImageField(serializers.ImageField):
+
+    def to_internal_value(self, data):
+        from django.core.files.base import ContentFile
+        import base64
+        import six
+        import uuid
+
+        if isinstance(data, six.string_types):
+            if 'data:' in data and ';base64,' in data:
+                header, data = data.split(';base64,')
+
+            try:
+                decoded_file = base64.b64decode(data)
+            except TypeError:
+                self.fail('invalid_image')
+
+            file_name = str(uuid.uuid4())[:12] 
+
+            file_extension = self.get_file_extension(file_name, decoded_file)
+
+            complete_file_name = "%s.%s" % (file_name, file_extension, )
+
+            data = ContentFile(decoded_file, name=complete_file_name)
+
+        return super(Base64ImageField, self).to_internal_value(data)
+
+    def get_file_extension(self, file_name, decoded_file):
+        import imghdr
+
+        extension = imghdr.what(file_name, decoded_file)
+        extension = "jpg" if extension == "jpeg" else extension
+
+        return extension
+
+class ImageSerializer(serializers.ModelSerializer):
+    image = Base64ImageField(
+        max_length=None, use_url=True,
+    )
+    class Meta:
+        model = Image
+        id = serializers.IntegerField(read_only=True)
+        fields = (
+            'id',
+            'username',
+            'image',
+        )
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
 
-        # Add custom claims
         token['username'] = user.username
         return token
 

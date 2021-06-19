@@ -43,27 +43,46 @@
 
     <div v-else>
     <div>
-    <q-btn
-      push
-      color="primary"
-      label="Upload"
-      icon="file_upload"
-      class="q-mb-md float-right"/>
+      <q-file color="black" class="float-right" style="max-width:300px" outlined v-model="modelPhoto" label="Upload image">
+        <template v-slot:prepend>
+          <q-icon name="attachment" />
+        </template>
+        <template v-slot:append>
+          <q-icon name="close" @click.stop="modelPhoto = null" class="cursor-pointer" />
+        </template>
+        <template v-slot:after>
+          <q-btn round dense flat icon="send" @click="uploadData()" />
+        </template>
+      </q-file>
     <h4 class="text-weight-bold"> Your journey </h4>
     </div>
     <div class="q-gutter-md row items-start">
     <q-img
-        v-for="image in gallery"
-        :key="image"
-        :src="image"
+        v-for="img in photoData"
+        :key="img"
+        :src="img"
         :ratio="1"
         basic
         spinner-color="white"
         class="rounded-borders my-gallery"
       >
-        <div class="absolute-bottom text-center text-italic text-body2">
-          None
-        </div>
+      <div v-if="indivDelete">
+      <q-btn icon="delete" size="sm" @click="confirm=true" text-color="red" color="white" class="float-right q-mr-xs q-mt-xs" dense>
+      <q-tooltip content-class="bg-red">Delete this picture</q-tooltip>
+      </q-btn>
+      <q-dialog v-model="confirm" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="delete" color="red" text-color="white" />
+          <span class="q-ml-sm">Are you sure you want to delete this picture?</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn flat label="Yes" color="primary" @click="deleteData(img)" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog></div>
       </q-img>
     </div>
   </div>
@@ -71,9 +90,16 @@
 </template>
 
 <script>
+import { api } from 'boot/axios'
 export default {
   data () {
     return {
+      photoData: [],
+      allData: [],
+      confirm: false,
+      indivDelete: false,
+      modelPhoto: null,
+      file: '',
       gallery: [
         'ushapelogo.png',
         'ushapelogo.png',
@@ -99,8 +125,73 @@ export default {
       return this.$store.state.auth.status.loggedIn
     },
     getUsername () { // functie ce returneaza username
-      return this.$store.auth.user.username
+      return this.$store.state.auth.usernameName
+    },
+    check () {
+      console.log(this.modelPhoto.name)
+      return this.modelPhoto
     }
+  },
+  methods: {
+    getData: function (data, keyword) {
+      this.returnData = []
+      this.finalData = []
+      this.returnData = data.filter(obj => {
+        return obj.username === keyword
+      })
+      for (var i = 0, len = this.returnData.length; i < len; i++) {
+        this.finalData.push(this.returnData[i].image)
+        this.allData.push(this.returnData[i])
+      }
+      return this.finalData
+    },
+    loadData: function () {
+      api.get('/api/imageupload/')
+        .then((response) => {
+          this.data = response.data
+          this.isLoaded = true
+          this.photoData = this.getData(this.data, this.getUsername)
+        }
+        )
+        .catch(() => {
+          this.$q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Loading failed',
+            icon: 'report_problem'
+          })
+        })
+    },
+    uploadData: function () {
+      const formData = new FormData()
+      formData.append('username', this.getUsername)
+      formData.append('image', this.modelPhoto)
+      console.log(formData)
+      api.post('/api/imageupload/', formData)
+        .then((response) => {
+          this.$router.push('/journal')
+        }
+        )
+        .catch(error => {
+          this.errorMessage = error.message
+          console.error('There was an error broder!', error)
+        })
+    },
+    deleteData (itemDel) {
+      console.log('O sa dau delete la: ')
+      console.log(itemDel, 1)
+      for (var i = 0, len = this.allData.length; i < len; i++) {
+        if (this.allData[i].image === itemDel) {
+          this.pkDel = this.allData[i].id
+        }
+      }
+      console.log('Id-ul de sters:', this.pkDel)
+      api.delete('/api/imageupload/', itemDel, this.pkDel)
+    }
+  },
+  mounted () {
+    this.loadData()
+    console.log(this.allData)
   }
 }
 </script>

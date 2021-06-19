@@ -72,7 +72,7 @@ const linksData = [
   {
     title: 'Calorie calculator',
     icon: 'calculate',
-    component: 'caloriecalculator',
+    component: 'nutritionaltables',
     routename: 'calorie-calculator'
   },
   {
@@ -80,7 +80,26 @@ const linksData = [
     icon: 'book',
     component: 'journal',
     routename: 'journal'
+  },
+  {
+    title: 'Nearby Gyms',
+    icon: 'map',
+    component: 'map',
+    routename: 'map'
+  },
+  {
+    title: 'Suggestions',
+    icon: 'music_note',
+    component: 'suggestions',
+    routename: 'suggestions'
+  },
+  {
+    title: 'Special fitness',
+    icon: 'accessible_forward',
+    component: 'specialfitness',
+    routename: 'special-fitness'
   }
+
 ]
 
 export default {
@@ -95,11 +114,15 @@ export default {
   computed: {
     isLoggedIn () {
       return this.$store.state.auth.status.loggedIn
+    },
+    getUsername () { // functie ce returneaza username
+      return this.$store
     }
   },
   methods: {
     logOut () {
       this.$store.dispatch('auth/logout')
+      this.$store.state.auth.usernameName = 'loggedOut'
       this.$router.push('/login')
     }
   }

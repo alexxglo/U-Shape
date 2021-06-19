@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from backend import views
 from backend.views import MyObtainTokenPairView, RegisterView
@@ -9,7 +9,8 @@ urlpatterns = [
     path('calorie-list/<int:pk>/', views.calorielist_detail),
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('login/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
-    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('imageupload/', views.ImageViewSet.as_view({'post': 'create', 'get' : 'list'}))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

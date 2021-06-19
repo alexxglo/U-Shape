@@ -3,11 +3,13 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from backend.models import Calorielist
+from backend.models import Image
 from backend.serializers import CalorielistSerializer
-
+from backend.serializers import ImageSerializer
 #auth tokens
 from .serializers import MyTokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
@@ -17,12 +19,12 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from .serializers import RegisterSerializer
 from rest_framework import generics
+from rest_framework.exceptions import ParseError
+from rest_framework.decorators import action
 
 @api_view(['GET', 'POST'])
 def calorielist_list(request, format=None):
-    """
-    List all code products, or create a new product.
-    """
+    
     if request.method == 'GET':
         product = Calorielist.objects.all()
         serializer = CalorielistSerializer(product, many=True)
@@ -37,9 +39,7 @@ def calorielist_list(request, format=None):
 
 @api_view(['GET','PUT','DELETE'])
 def calorielist_detail(request, pk, format=None):
-    """
-    Retrieve, update or delete a code product.
-    """
+
     try:
         product = Calorielist.objects.get(pk=pk)
     except Calorielist.DoesNotExist:
@@ -68,3 +68,22 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
+class ImageViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+
+    @action(methods=['post'], detail=True)
+    def upload_docs(request):
+        try:
+            name = request.data['username']
+            file = request.data['image']
+        except KeyError:
+            raise ParseError('Request has no resource file attached')
+        img = Image.objects.create(username = name, image=file)
+    
+    @action(methods=['get'], detail=True)
+    def get_docs(request):
+        image = Image.objects.all()
+        serializer = ImageSerializer(image, many=True)
+        return Response(serializer.data)

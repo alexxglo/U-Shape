@@ -134,12 +134,24 @@ export default {
       } else {
         this.message = ''
         this.submitted = true
+        this.$store.state.auth.usernameName = this.user.username
         this.$store.dispatch('auth/register', this.user).then(
           data => {
+            this.$q.notify({
+              icon: 'done',
+              color: 'positive',
+              message: 'Submitted'
+            })
             this.message = data.message
             this.successful = true
+            this.$store.state.auth.status.loggedIn = true
+            this.$router.push('/journal')
           },
           error => {
+            this.$q.notify({
+              color: 'negative',
+              message: 'Something went wrong!'
+            })
             this.message =
               (error.response && error.response.data) ||
               error.message ||
@@ -147,11 +159,6 @@ export default {
             this.successful = false
           }
         )
-        this.$q.notify({
-          icon: 'done',
-          color: 'positive',
-          message: 'Submitted'
-        })
       }
     },
 
