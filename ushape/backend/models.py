@@ -21,3 +21,12 @@ class Image (models.Model):
         upload_to=imageFile,
         max_length=254, blank=True, null=True
     )
+
+class MealList (models.Model):
+    name = models.CharField(max_length=100, blank=True, default='')
+    calories = models.IntegerField(default=0)
+    fat = models.TextField(max_length=100, default='')
+    carbs = models.TextField(max_length=100, default='')
+    protein = models.TextField(max_length=100, default='')
+    alternative = models.TextField(max_length=100, default='')
+    altkcal = models.TextField(max_length=100, default='')

@@ -12,7 +12,8 @@ const routes = [
       { path: '/register', component: () => import('pages/Register.vue') },
       { path: '/map', component: () => import('pages/Map.vue') },
       { path: '/suggestions', component: () => import('pages/Suggestions.vue') },
-      { path: '/special-fitness', component: () => import('pages/SpecialFitness.vue') }
+      { path: '/special-fitness', component: () => import('pages/SpecialFitness.vue') },
+      { path: '/img-check', component: () => import('pages/ImgCheck.vue') }
     ]
   },
   // Always leave this as last one,

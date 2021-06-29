@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import routes from './routes'
 import store from './../store/index'
 import { sync } from 'vuex-router-sync'
-
+import VueCompositionAPI from '@vue/composition-api'
 Vue.use(VueRouter)
 
 /*
@@ -44,6 +44,6 @@ sync(store, Vue.router)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
+Vue.use(VueCompositionAPI)
 Vue.axios.defaults.baseURL = '/api'
-
 export default Vue.router

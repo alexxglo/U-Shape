@@ -13,12 +13,12 @@
 
       <q-card-section class="my-desc">
         <div class="text-h5 text-center q-mt-sm q-mb-xs">Looking for a gym?</div>
-        <div class="text-caption text-center text-black">
+        <div class="text-caption text-center text-black q-mb-md">
           U-Shape always provides the best recommandations for when you're looking for a muscle-building temple.
         </div>
         <div class="q-mt-xl absolute-center q-pt-lg q-pb-xl">
-        <q-btn class="q-mr-md q-mt-xl" color="primary" icon="map" @click="generate">Show nearby gyms</q-btn>
-        <q-btn-dropdown class="q-mt-xl" color="primary" icon="add" label="Choose your city">
+        <q-btn class="q-mr-md q-mt-xl absolute-center" color="primary" icon="map" @click="generate">Show nearby gyms</q-btn>
+        <q-btn-dropdown class="q-mt-xl q-mb-md" color="primary" icon="add" label="Choose your city">
           <q-list>
         <q-item clickable v-close-popup @click="onBucharestClick">
           <q-item-section>

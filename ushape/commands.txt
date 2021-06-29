@@ -11,3 +11,7 @@ python manage.py runserver
 localhost:8000/api/... - adresa pentru django
 localhost:3000 - adresa pentru quasar frontend
 ++ parteneriat de site-uri de retete
+
+to add db:
+python manage.py makemigrations
+python manage.py migrate

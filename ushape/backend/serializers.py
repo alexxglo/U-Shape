@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.models import Calorielist
+from backend.models import Calorielist, MealList
 from backend.models import Image
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
@@ -127,3 +127,27 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+class MealListSerializer (serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(required=True, allow_blank=True, max_length=100)
+    calories = serializers.IntegerField(required=True)
+    fat = serializers.CharField(required=True, allow_blank=True, max_length=100)
+    carbs = serializers.CharField(required=True, allow_blank=True, max_length=100)
+    protein = serializers.CharField(required=True, allow_blank=True, max_length=100)
+    alternative = serializers.CharField(required=True, allow_blank=True, max_length=100)
+    altkcal = serializers.CharField(required=True, allow_blank=True, max_length=100)
+    
+    def create(self, validated_data):
+        return MealList.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('title', instance.name)
+        instance.calories = validated_data.get('calories', instance.calories)
+        instance.fat = validated_data.get('fat', instance.fat)
+        instance.carbs = validated_data.get('carbs', instance.carbs)
+        instance.protein = validated_data.get('protein', instance.protein)
+        instance.alternative = validated_data.get('alternative', instance.alternative)
+        instance.altkcal = validated_data.get('altkcal', instance.altkcal)
+        instance.save()
+        return instance

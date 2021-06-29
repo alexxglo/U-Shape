@@ -1,14 +1,8 @@
 <template>
- <div class = "justify-center align-center">
-    <div class="flex flex-center">
-    <q-circular-progress
-      indeterminate
-      size="85px"
-      :thickness="1"
-      color="grey-1"
-      track-color="primary"
-      class="q-ma-md"
-    /></div>
+ <div class = "justify-center align-center q-mt-xl">
+    <div class="flex flex-center q-mb-md">
+    <q-img class="q-mt-md" src="~assets/ushapelogo.png" style="width:240px; height:160px;"/>
+    </div>
     <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="justify-center items-center">
       <q-input
         ref="username"
@@ -28,6 +22,7 @@
         label="Your password *"
         lazy-rules
         :rules="[val => val.length > 0 || 'Please type your password']"
+        class="q-mt-xs"
       >
       <template v-slot:append>
           <q-icon
@@ -36,7 +31,7 @@
             @click="isPwd = !isPwd"
           />
         </template></q-input>
-       <div>
+       <div class="float-left q-mt-xs">
         <q-btn label="Submit" type="submit" color="primary" />
       </div>
     </form>

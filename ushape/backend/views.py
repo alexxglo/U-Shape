@@ -6,9 +6,9 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from backend.models import Calorielist
+from backend.models import Calorielist, MealList
 from backend.models import Image
-from backend.serializers import CalorielistSerializer
+from backend.serializers import CalorielistSerializer, MealListSerializer
 from backend.serializers import ImageSerializer
 #auth tokens
 from .serializers import MyTokenObtainPairSerializer
@@ -87,3 +87,49 @@ class ImageViewSet(viewsets.ModelViewSet):
         image = Image.objects.all()
         serializer = ImageSerializer(image, many=True)
         return Response(serializer.data)
+
+    @action(methods=['delete'], detail=True)
+    def delete_docs(request):
+        try:
+            name = request.data['username']
+        except KeyError:
+            raise ParseError('Request has no resource file attached')
+        img = Image.objects.delete(username = name)
+
+@api_view(['GET', 'POST'])
+def mealList_list(request, format=None):
+    
+    if request.method == 'GET':
+        product = MealList.objects.all()
+        serializer = MealListSerializer(product, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = MealListSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','PUT','DELETE'])
+def mealList_detail(request, pk, format=None):
+
+    try:
+        product = MealList.objects.get(pk=pk)
+    except MealList.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = MealListSerializer(product)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = MealListSerializer(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        product.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

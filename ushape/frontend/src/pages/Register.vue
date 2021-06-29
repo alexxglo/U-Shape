@@ -1,14 +1,8 @@
 <template>
-  <div class = "justify-center align-center">
-    <div class="flex flex-center">
-    <q-circular-progress
-      indeterminate
-      size="85px"
-      :thickness="1"
-      color="grey-1"
-      track-color="primary"
-      class="q-ma-md"
-    /></div>
+  <div class = "justify-center align-center q-mt-xl">
+    <div class="flex flex-center q-mb-md">
+    <q-img class="q-mt-md" src="~assets/ushapelogo.png" style="width:240px; height:160px;"/>
+    </div>
     <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="justify-center items-center">
       <q-input
         ref="username"
@@ -28,6 +22,7 @@
         label="Your e-mail *"
         lazy-rules
         :rules="[ val => val && val.length > 0 || 'Please enter your e-mail']"
+        class="q-mt-xs"
       />
       <q-input
         ref="password"
@@ -38,6 +33,7 @@
         label="Your password *"
         lazy-rules
         :rules="[val => val.length > 7 || 'Password too short']"
+        class="q-mt-xs"
       >
       <template v-slot:append>
           <q-icon
@@ -54,7 +50,8 @@
         v-model="user.password2"
         label="Repeat your password *"
         lazy-rules
-        :rules="[val => val.length > 7 || 'Passwords must be identical']">
+        :rules="[val => val.length > 7 || 'Passwords must be identical']"
+        class="q-mt-xs">
         <template v-slot:append>
           <q-icon
             :name="isPwd2 ? 'visibility_off' : 'visibility'"
@@ -70,6 +67,7 @@
         label="Your first name *"
         lazy-rules
         :rules="[ val => val && val.length > 0 || 'Please type your first name']"
+        class="q-mt-xs"
       />
       <q-input
         ref="last_name"
@@ -79,6 +77,7 @@
         label="Your last name *"
         lazy-rules
         :rules="[ val => val && val.length > 0 || 'Please type your last name']"
+        class="q-mt-xs"
       />
        <q-toggle v-model="accept" label="I accept the license and terms" />
       <div>

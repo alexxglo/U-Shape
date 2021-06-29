@@ -61,7 +61,7 @@ export default {
         }
       ],
       tab: 'diet 1',
-      splitterModel: 10,
+      splitterModel: 15,
       myKey: 0
     }
   }

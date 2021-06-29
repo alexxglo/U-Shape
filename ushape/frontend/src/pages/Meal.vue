@@ -1,7 +1,7 @@
 <template>
     <q-card class="my-card q-ma-md justify-center items-center" v-if="props.selected == 1" style="max-width:250px; min-width:250px;">
            <div v-if ="props.row.calories > 300">
-           <q-btn no-caps color="warning" text-color="dark" @click ="healthierAlternative(props.row.alternative, props.row.calories)" label="Healthier alternative?" />
+           <q-btn no-caps color="warning" text-color="dark" @click ="healthierAlternative(props.row.alternative, props.row.altkcal)" label="Healthier alternative?" />
             <q-btn icon="close" size="xs" color="red" @click="progress = false, difference(props.row.calories), props.selected=0" class="float-right on-right" dense/>
            </div>
            <div v-else>
